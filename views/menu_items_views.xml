@@ -1,0 +1,6 @@
+<odoo>
+  <data>
+    <!-- Submenu item -->
+    <menuitem name="Stock Moves" id="stock_move_report_submenu" parent="stock.menu_warehouse_report" action="action_stock_move_report"/>
+  </data>
+</odoo>

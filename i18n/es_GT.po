@@ -1,0 +1,93 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* stock_move_report
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 10.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-08-28 22:48+0000\n"
+"PO-Revision-Date: 2019-08-28 22:48+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: stock_move_report
+#: model:ir.ui.view,arch_db:stock_move_report.stock_move_report_view
+msgid "Cancel"
+msgstr "Cancelar"
+
+#. module: stock_move_report
+#: model:ir.model.fields,field_description:stock_move_report.field_stock_move_report_company_id
+msgid "Company"
+msgstr "Compañía"
+
+#. module: stock_move_report
+#: model:ir.model.fields,field_description:stock_move_report.field_stock_move_report_create_uid
+msgid "Created by"
+msgstr "Creado por"
+
+#. module: stock_move_report
+#: model:ir.model.fields,field_description:stock_move_report.field_stock_move_report_create_date
+msgid "Created on"
+msgstr "Creado el"
+
+#. module: stock_move_report
+#: model:ir.model.fields,field_description:stock_move_report.field_stock_move_report_display_name
+msgid "Display Name"
+msgstr "Nombre a mostrar"
+
+#. module: stock_move_report
+#: model:ir.model.fields,field_description:stock_move_report.field_stock_move_report_end
+msgid "End Date"
+msgstr "Fecha finalización"
+
+#. module: stock_move_report
+#: model:ir.ui.view,arch_db:stock_move_report.stock_move_report_view
+msgid "Export Xlsx"
+msgstr "Export Xlsx"
+
+#. module: stock_move_report
+#: model:ir.model.fields,field_description:stock_move_report.field_stock_move_report_id
+msgid "ID"
+msgstr "ID"
+
+#. module: stock_move_report
+#: model:ir.model.fields,field_description:stock_move_report.field_stock_move_report___last_update
+msgid "Last Modified on"
+msgstr "Última modificación en"
+
+#. module: stock_move_report
+#: model:ir.model.fields,field_description:stock_move_report.field_stock_move_report_write_uid
+msgid "Last Updated by"
+msgstr "Última actualización por"
+
+#. module: stock_move_report
+#: model:ir.model.fields,field_description:stock_move_report.field_stock_move_report_write_date
+msgid "Last Updated on"
+msgstr "Última actualización el"
+
+#. module: stock_move_report
+#: model:ir.model.fields,field_description:stock_move_report.field_stock_move_report_start
+msgid "Star Date"
+msgstr "Fecha Inicio"
+
+#. module: stock_move_report
+#: model:ir.actions.act_window,name:stock_move_report.action_stock_move_report
+#: model:ir.actions.report.xml,name:stock_move_report.action_stock_move_report_excel
+msgid "Stock Move Report"
+msgstr "Reporte Movimientos de Inventario"
+
+#. module: stock_move_report
+#: model:ir.ui.menu,name:stock_move_report.stock_move_report_submenu
+msgid "Stock Moves"
+msgstr "Movimientos de Inventario"
+
+#. module: stock_move_report
+#: model:ir.model,name:stock_move_report.model_stock_move_report
+msgid "stock.move.report"
+msgstr "stock.move.report"
+

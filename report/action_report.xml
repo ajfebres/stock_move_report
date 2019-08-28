@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <report
+            id="action_stock_move_report_excel"
+            model="stock.move.report"
+            string="Stock Move Report"
+            report_type="xlsx"
+            name="stock_move_report.accounting_report_sales_excel"
+            file="stock_move_report.accounting_report_sales_excel"/>
+    </data>
+</odoo>
