@@ -30,27 +30,43 @@ class AccountigReportSales(ReportXlsx):
 		row = 5
 		for product, moves in products.items():
 			sheet.write(row, 0, 'Producto', bold)
-			sheet.write(row+1, 0, product.name, bold)
 			sheet.write(row, 1, 'No. Doc', bold)
 			sheet.write(row, 2, 'No. Orden', bold)
 			sheet.write(row, 3, 'Fecha', bold)
 			sheet.write(row, 4, 'Salida', bold)
 			sheet.write(row, 5, 'Entrada', bold)
+			sheet.write(row, 6, 'Salida Costo', bold)
+			sheet.write(row, 7, 'Entrada Costo', bold)
 			move_row = row + 1
 			total_out = total_in = 0
 			for mv in moves:
 				date_format = datetime.strptime(mv.date, '%Y-%m-%d %H:%M:%S').strftime('%d-%b')
+				sheet.write(move_row, 0, product.name, bold)
 				sheet.write(move_row, 2, mv.origin, text)
 				sheet.write(move_row, 3, date_format, text)
 
 				sale_id = sale_order.search([('name', '=', mv.origin)], limit=1)
 				if sale_id:
-					document = ', '.join([i.number for i in sale_id.invoice_ids.filtered(lambda i: i.state in ['open', 'paid'])])
+					sale_invoices = sale_id.invoice_ids.filtered(lambda i: i.state in ['open', 'paid'])
+					line_ids = []
+					for inv in sale_invoices:
+						for line in inv.move_id.line_ids.filtered(lambda m: '5101001' in m.account_id.name):
+							line_ids.append(line)
+					debit = sum([l.debit for l in line_ids])
+					document = ', '.join([i.number for i in sale_invoices])
 					sheet.write(move_row, 1, document, text)
+					sheet.write(move_row, 6, debit, text)
 				purchase_id = purchase_order.search([('name', '=', mv.origin)], limit=1)
 				if purchase_id:
-					document = ', '.join([i.number for i in purchase_id.invoice_ids.filtered(lambda i: i.state in ['open', 'paid'])])
+					purchase_invoices = purchase_id.invoice_ids.filtered(lambda i: i.state in ['open', 'paid'])
+					lines_ids = []
+					for inv in purchase_invoices:
+						for line in inv.move_id.line_ids.filtered(lambda m: '1104001' in m.account_id.name):
+							lines_ids.append(line)
+					debit = sum([l.debit for l in lines_ids])
+					document = ', '.join([i.number for i in purchase_invoices])
 					sheet.write(move_row, 1, document, text)
+					sheet.write(move_row, 7, debit, text)
 				if mv.picking_type_id.code == 'outgoing':
 					sheet.write(move_row, 4, mv.product_uom_qty, text)
 					total_out+=mv.product_uom_qty
@@ -58,10 +74,7 @@ class AccountigReportSales(ReportXlsx):
 					sheet.write(move_row, 5, mv.product_uom_qty, text)
 					total_in+=mv.product_uom_qty
 				move_row+=1
-			sheet.write(move_row, 0, 'TOTAL', bold)
-			sheet.write(move_row, 4, total_out, bold)
-			sheet.write(move_row, 5, total_in, bold)
-			move_row+=2
+			move_row+=1
 			row=move_row
 
 
