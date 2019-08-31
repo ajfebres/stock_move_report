@@ -9,7 +9,7 @@ class AccountigReportSales(ReportXlsx):
 		stock_move = self.env['stock.move']
 		sale_order =self.env['sale.order']
 		purchase_order = self.env['purchase.order']
-		account_move = self.env['account.move']
+		account_move_line = self.env['account.move']
 
 		date = datetime.strptime(wizard.start, '%Y-%m-%d')
 		end_date = datetime.strptime(wizard.end, '%Y-%m-%d')
@@ -66,12 +66,9 @@ class AccountigReportSales(ReportXlsx):
 				if mv.picking_type_id.code == 'outgoing':
 					sheet.write(move_row, 4, mv.product_uom_qty, text)
 				elif mv.picking_type_id.code == 'incoming':
-					lines_ids=[]
 					sheet.write(move_row, 5, mv.product_uom_qty, text)
-					move_id = account_move.search([('ref', '=', mv.picking_id.name)])
-					print(move_id.name)
-					for line in move_id.line_ids.filtered(lambda m: wizard.purchase_account_id == m.account_id and mv.product_id == m.product_id):
-						lines_ids.append(line)
+					move_line_id = account_move_id.search([('move_id.ref', '=', mv.picking_id.name)])
+					line_ids = move_line_id.filtered(lambda m: wizard.purchase_account_id == m.account_id and mv.product_id == m.product_id)
 					debit = sum([l.debit for l in lines_ids])
 					sheet.write(move_row, 7, debit, text)
 				move_row+=1
