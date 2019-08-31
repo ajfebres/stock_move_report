@@ -11,6 +11,8 @@
             <field name="company_id" option="{'no_create': True}"/>
             <field name="start"/>
             <field name="end"/>
+            <field name="sale_account_id"/>
+            <field name="purchase_account_id"/>
          </group> 
           <footer>
               <button name="print_excel_report" type="object" string="Export Xlsx" class="oe_highlight"/>

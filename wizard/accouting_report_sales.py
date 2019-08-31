@@ -9,6 +9,8 @@ class StockMoveReport(models.TransientModel):
 	company_id = fields.Many2one('res.company', string="Company", default= lambda self: self.env.user.company_id)
 	start = fields.Date(string='Star Date', required=True, default=date.today())
 	end = fields.Date(string='End Date', required=True)
+	sale_account_id = fields.Many2one('account.account', string="Account Cost Sale", required=True)
+	purchase_account_id = fields.Many2one('account.account', string="Account Cost Purchase", required=True)
 
 	def print_excel_report(self):
 		self.ensure_one()

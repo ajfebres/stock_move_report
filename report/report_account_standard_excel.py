@@ -9,6 +9,7 @@ class AccountigReportSales(ReportXlsx):
 		stock_move = self.env['stock.move']
 		sale_order =self.env['sale.order']
 		purchase_order = self.env['purchase.order']
+		account_move = self.env['account.move']
 
 		date = datetime.strptime(wizard.start, '%Y-%m-%d')
 		end_date = datetime.strptime(wizard.end, '%Y-%m-%d')
@@ -28,17 +29,17 @@ class AccountigReportSales(ReportXlsx):
 			products[move.product_id].append(move)
 		
 		row = 5
+		sheet.write(row, 0, 'Producto', bold)
+		sheet.write(row, 1, 'No. Doc', bold)
+		sheet.write(row, 2, 'No. Orden', bold)
+		sheet.write(row, 3, 'Fecha', bold)
+		sheet.write(row, 4, 'Salida', bold)
+		sheet.write(row, 5, 'Entrada', bold)
+		sheet.write(row, 6, 'Salida Costo', bold)
+		sheet.write(row, 7, 'Entrada Costo', bold)
+		row+=1
 		for product, moves in products.items():
-			sheet.write(row, 0, 'Producto', bold)
-			sheet.write(row, 1, 'No. Doc', bold)
-			sheet.write(row, 2, 'No. Orden', bold)
-			sheet.write(row, 3, 'Fecha', bold)
-			sheet.write(row, 4, 'Salida', bold)
-			sheet.write(row, 5, 'Entrada', bold)
-			sheet.write(row, 6, 'Salida Costo', bold)
-			sheet.write(row, 7, 'Entrada Costo', bold)
-			move_row = row + 1
-			total_out = total_in = 0
+			move_row = row
 			for mv in moves:
 				date_format = datetime.strptime(mv.date, '%Y-%m-%d %H:%M:%S').strftime('%d-%b')
 				sheet.write(move_row, 0, product.name, bold)
@@ -50,7 +51,8 @@ class AccountigReportSales(ReportXlsx):
 					sale_invoices = sale_id.invoice_ids.filtered(lambda i: i.state in ['open', 'paid'])
 					line_ids = []
 					for inv in sale_invoices:
-						for line in inv.move_id.line_ids.filtered(lambda m: '5101001' in m.account_id.name):
+						print(inv.move_id.name)
+						for line in inv.move_id.line_ids.filtered(lambda m: wizard.sale_account_id in m.account_id and mv.product_id == m.product_id):
 							line_ids.append(line)
 					debit = sum([l.debit for l in line_ids])
 					document = ', '.join([i.number for i in sale_invoices])
@@ -59,23 +61,21 @@ class AccountigReportSales(ReportXlsx):
 				purchase_id = purchase_order.search([('name', '=', mv.origin)], limit=1)
 				if purchase_id:
 					purchase_invoices = purchase_id.invoice_ids.filtered(lambda i: i.state in ['open', 'paid'])
-					lines_ids = []
-					for inv in purchase_invoices:
-						for line in inv.move_id.line_ids.filtered(lambda m: '1104001' in m.account_id.name):
-							lines_ids.append(line)
-					debit = sum([l.debit for l in lines_ids])
 					document = ', '.join([i.number for i in purchase_invoices])
 					sheet.write(move_row, 1, document, text)
-					sheet.write(move_row, 7, debit, text)
 				if mv.picking_type_id.code == 'outgoing':
 					sheet.write(move_row, 4, mv.product_uom_qty, text)
-					total_out+=mv.product_uom_qty
 				elif mv.picking_type_id.code == 'incoming':
+					lines_ids=[]
 					sheet.write(move_row, 5, mv.product_uom_qty, text)
-					total_in+=mv.product_uom_qty
+					move_id = account_move.search([('ref', '=', mv.picking_id.name)])
+					print(move_id.name)
+					for line in move_id.line_ids.filtered(lambda m: wizard.purchase_account_id == m.account_id and mv.product_id == m.product_id):
+						lines_ids.append(line)
+					debit = sum([l.debit for l in lines_ids])
+					sheet.write(move_row, 7, debit, text)
 				move_row+=1
-			move_row+=1
-			row=move_row
+			row = move_row
 
 
 AccountigReportSales('report.stock_move_report.accounting_report_sales_excel', 'stock.move.report')
