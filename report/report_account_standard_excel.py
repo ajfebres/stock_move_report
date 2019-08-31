@@ -67,7 +67,7 @@ class AccountigReportSales(ReportXlsx):
 					sheet.write(move_row, 4, mv.product_uom_qty, text)
 				elif mv.picking_type_id.code == 'incoming':
 					sheet.write(move_row, 5, mv.product_uom_qty, text)
-					move_line_id = account_move_id.search([('move_id.ref', '=', mv.picking_id.name)])
+					move_line_id = account_move_line.search([('move_id.ref', '=', mv.picking_id.name)])
 					line_ids = move_line_id.filtered(lambda m: wizard.purchase_account_id == m.account_id and mv.product_id == m.product_id)
 					debit = sum([l.debit for l in lines_ids])
 					sheet.write(move_row, 7, debit, text)
